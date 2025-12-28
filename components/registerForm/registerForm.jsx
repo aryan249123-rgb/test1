@@ -8,6 +8,7 @@ export default function LoginForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [resigtered, setRegistered] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,6 +18,7 @@ export default function LoginForm() {
       return;
     }
     try {
+      setLoading(true);
       const res = await fetch("/api/register", {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -28,13 +30,16 @@ export default function LoginForm() {
       });
       if (res.ok) {
         const form = e.target;
+        setLoading(false);
         setRegistered(true);
         form.reset();
       } else {
         console.log("user registeration failled");
+        setLoading(false);
       }
     } catch (error) {
       console.log("error during registeration");
+      setLoading(false);
     }
   };
   return (
@@ -66,7 +71,9 @@ export default function LoginForm() {
             type="password"
             placeholder="Password"
           ></input>
-          <button className="bg-blue-600  text-white p-2">Register</button>
+          <button className="bg-blue-600  text-white p-2">
+            {loading ? "Loading.." : "Registered"}
+          </button>
           {resigtered && (
             <p className="text-blue-500">Registeration successfull</p>
           )}
