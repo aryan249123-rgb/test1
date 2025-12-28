@@ -7,6 +7,7 @@ export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [resigtered, setRegistered] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,11 +23,12 @@ export default function LoginForm() {
         body: JSON.stringify({
           name,
           email,
-          password
+          password,
         }),
       });
       if (res.ok) {
         const form = e.target;
+        setRegistered(true);
         form.reset();
       } else {
         console.log("user registeration failled");
@@ -37,7 +39,7 @@ export default function LoginForm() {
   };
   return (
     <div className="flex items-center justify-center h-full w-full bg-black">
-      <div className="text-white flex flex-col gap-2 bg-black w-1/3 h-[43%] px-5 py-4 border-8 border-white rounded-2xl">
+      <div className="text-white flex flex-col gap-2 bg-black w-1/3 h-fit px-5 py-4 border-8 border-white rounded-2xl">
         <h1 className="text-xl text-white font-bold mt-4">SignUp</h1>
         <form
           onSubmit={handleSubmit}
@@ -65,6 +67,9 @@ export default function LoginForm() {
             placeholder="Password"
           ></input>
           <button className="bg-blue-600  text-white p-2">Register</button>
+          {resigtered && (
+            <p className="text-blue-500">Registeration successfull</p>
+          )}
           <div className="w-full flex justify-between">
             {error && (
               <div className="bg-red-500 w-auto rounded-2xl p-2 text-white">
